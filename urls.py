@@ -22,7 +22,7 @@ from views import index_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('trips.urls')),
+    path('', include('trips.urls')),
     
     # Serve static files
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
