@@ -1,14 +1,9 @@
 from django.db import models
 from .profile import Profile
 import uuid
+from trips.utils.enums import TripStatus
 
 class Trip(models.Model):
-    TRIP_STATUSES = [
-        ('PLANNING', 'Planning'),
-        ('IN_PROGRESS', 'In Progress'),
-        ('COMPLETED', 'Completed'),
-        ('CANCELLED', 'Cancelled'),
-    ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=200)
@@ -23,7 +18,7 @@ class Trip(models.Model):
         through='TripTraveler',
         related_name='trips_participating'
     )
-    status = models.CharField(max_length=20, choices=TRIP_STATUSES, default='PLANNING')
+    status = models.CharField(max_length=20, choices=TripStatus.choices, default=TripStatus.PLANNING)
     budget = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     currency = models.CharField(max_length=3, default='USD')
     visa_required = models.BooleanField(default=False)

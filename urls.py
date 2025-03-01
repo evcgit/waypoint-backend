@@ -37,5 +37,5 @@ urlpatterns = [
     re_path(r'^assets/(?P<path>.*)$', serve, {'document_root': settings.VITE_APP_DIR / 'dist/assets'}),
     
     # Catch all route should be LAST
-    re_path(r'^.*$', index_view, name='index'),
+    # re_path(r'^.*$', index_view, name='index'),
 ]
