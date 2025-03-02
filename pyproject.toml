@@ -1,22 +1,25 @@
-[project]
+[tool.poetry]
 name = "waypoint-backend"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "Evan Cortez",email = "evanvcortez@gmail.com"}
-]
+authors = ["Evan Cortez <evanvcortez@gmail.com>", "Conner Owen <bigglesworth330@gmail.com>"]
 readme = "README.md"
-requires-python = ">=3.13"
-dependencies = [
-    "django (>=5.1.6,<6.0.0)",
-    "psycopg2 (>=2.9.10,<3.0.0)",
-    "djangorestframework (>=3.15.2,<4.0.0)",
-    "python-dotenv (>=1.0.1,<2.0.0)",
-    "django-cors-headers (>=4.7.0,<5.0.0)",
-    "djangorestframework-simplejwt (>=5.4.0,<6.0.0)",
-    "rest-framework-simplejwt (>=0.0.2,<0.0.3)"
-]
+packages = [{include = "waypoint-site"}]
 
+[tool.poetry.dependencies]
+Django = "5.1.6"
+dj-rest-auth = {extras = ["with-social"], version = "^7.0.1"}
+django-allauth = "64.1.0"
+django-cors-headers = "^4.0.0"
+djangorestframework = "^3.13.1"
+djangorestframework-api-key = "^3.0.0"
+djangorestframework-simplejwt = "^5.1.0"
+python = ">=3.10,<4.0.0"
+python-dotenv = "^1.0.1"
+psycopg2 = "^2.9.10"
+
+[tool.poetry.scripts]
+site = 'waypoint-site:main'
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
