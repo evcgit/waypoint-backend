@@ -1,27 +1,45 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets
 from rest_framework import status
-from rest_framework.generics import CreateAPIView
-from trips.serializers.users import UserSerializer, ProfileSerializer
+from rest_framework.decorators import action
+from trips.serializers.users import UserSerializer
 from django.contrib.auth.models import User
 from trips.models.profile import Profile
-
-class UserRegistrationView(CreateAPIView):
+    
+class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    
-class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        # Optionally, you can implement logic to blacklist the refresh token here
-        return Response(status=status.HTTP_204_NO_CONTENT)
     
-class RetrieveUser(APIView):
-    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        return User.objects.filter(id=self.request.user.id)
+    
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        data = request.data.copy()
+        
+        # Restructure the data to match serializer expectations
+        profile_fields = ['passport_expiry', 'nationality']
+        for field in profile_fields:
+            if field in data:
+                data[f'profile.{field}'] = data.pop(field)
 
-    def get(self, request):
-        profile, created = Profile.objects.get_or_create(user=request.user)
-        serializer = ProfileSerializer(profile)
+        serializer = self.get_serializer(instance, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def me(self, request, *args, **kwargs):
+        return Response(self.get_serializer(request.user).data)
+    
+    @action(detail=False, methods=['post'])
+    def logout(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+			
+			

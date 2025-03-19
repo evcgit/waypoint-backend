@@ -1,11 +1,12 @@
 from django.db import models
 from .profile import Profile
+from datetime import timedelta
 import uuid
 from trips.utils.enums import TripStatus
 
 class Trip(models.Model):
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=200)
     notes = models.TextField(blank=True)
     start_date = models.DateField()
@@ -54,7 +55,7 @@ class Trip(models.Model):
     
     @property
     def total_duration(self):
-        return sum(destination.duration for destination in self.all_destinations)
+        return sum((destination.duration for destination in self.all_destinations), timedelta())
 
     def __str__(self):
         return self.title
