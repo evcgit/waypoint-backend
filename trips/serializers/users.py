@@ -21,33 +21,23 @@ class UserSerializer(ModelSerializer):
         }
 
     def create(self, validated_data):
-        # Extract profile data
-        profile_data = {}
-        profile_fields = ['phone', 'date_of_birth', 'passport_expiry', 'nationality']
-        for field in profile_fields:
-            if f'profile.{field}' in validated_data:
-                profile_data[field] = validated_data.pop(f'profile.{field}')
-
-        # Create user (profile is auto-created by signal)
-        user = User.objects.create_user(**validated_data)
+        profile_data = validated_data.pop('profile', {})
         
-        # Update the auto-created profile
+        # (profile is auto-created by signal)
+        user = User.objects.create_user(**validated_data)
         for field, value in profile_data.items():
             setattr(user.profile, field, value)
         user.profile.save()
 
         return user
 
-    def update(self, instance, validated_data):
-        # Update profile fields
-        profile_fields = ['phone', 'date_of_birth', 'passport_expiry', 'nationality']
-        for field in profile_fields:
-            profile_field = f'profile.{field}'
-            if profile_field in validated_data:
-                setattr(instance.profile, field, validated_data.pop(profile_field))
-        instance.profile.save()
+    def update(self, instance, validated_data):        
+        if 'profile' in validated_data:
+            profile_data = validated_data.pop('profile')
+            for field, value in profile_data.items():
+                setattr(instance.profile, field, value)
+            instance.profile.save()
 
-        # Update user fields
         for attr, value in validated_data.items():
             if attr == 'password':
                 instance.set_password(value)

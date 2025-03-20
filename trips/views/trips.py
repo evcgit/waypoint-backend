@@ -14,15 +14,20 @@ class TripViewSet(viewsets.ModelViewSet):
         return Trip.objects.filter(
             Q(owner=user_profile) | 
             Q(travelers=user_profile)
-        ).distinct().order_by('-created_at')
+        ).distinct().order_by('-start_date')
     
     def get_serializer_class(self):
         if self.action in ['create', 'update', 'partial_update']:
             return TripCreateUpdateSerializer
         return TripSerializer
     
-    def perform_create(self, serializer):
+    def create(self, serializer):
         serializer.save(owner=self.request.user.profile)
+        
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
     
     @action(detail=False, methods=['get'])
     def owned(self):

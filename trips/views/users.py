@@ -19,13 +19,6 @@ class UserViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         data = request.data.copy()
-        
-        # Restructure the data to match serializer expectations
-        profile_fields = ['passport_expiry', 'nationality']
-        for field in profile_fields:
-            if field in data:
-                data[f'profile.{field}'] = data.pop(field)
-
         serializer = self.get_serializer(instance, data=data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
