@@ -17,6 +17,7 @@ python = ">=3.10,<4.0.0"
 python-dotenv = "^1.0.1"
 psycopg2 = "^2.9.10"
 dj-rest-auth = "^7.0.1"
+pytz = "^2025.1"
 
 [tool.poetry.scripts]
 site = 'waypoint-site:main'

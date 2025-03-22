@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from trips.models import Trip
-from trips.models.profile import Profile
 from datetime import date, timedelta
 
 # Create test users

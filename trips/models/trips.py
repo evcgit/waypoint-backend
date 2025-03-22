@@ -39,7 +39,7 @@ class Trip(models.Model):
         return Activity.objects.filter(destination__trip=self)
 
     @property
-    def all_transport(self):
+    def all_transports(self):
         return Transport.objects.filter(
             models.Q(from_destination__trip=self) | 
             models.Q(to_destination__trip=self)

@@ -53,6 +53,9 @@ class DestinationSerializer(serializers.ModelSerializer):
 class TripSerializer(serializers.ModelSerializer):
     travelers = TripTravelerSerializer(source='triptraveler_set', many=True, read_only=True)
     destinations = DestinationSerializer(source='destination_set', many=True, read_only=True)
+    activities = ActivitySerializer(source='all_activities', many=True, read_only=True)
+    transports = TransportSerializer(source='all_transports', many=True, read_only=True)
+    accommodations = AccommodationSerializer(source='all_accommodations', many=True, read_only=True)
     owner = ProfileLightSerializer(read_only=True)
     
     class Meta:
@@ -61,7 +64,7 @@ class TripSerializer(serializers.ModelSerializer):
                  'created_at', 'updated_at', 'owner', 'travelers',
                  'status', 'budget', 'currency', 'visa_required',
                  'visa_link', 'destinations', 'total_expenses',
-                 'total_duration']
+                 'total_duration', 'activities', 'transports', 'accommodations']
         read_only_fields = ['created_at', 'updated_at', 'total_expenses',
                            'total_duration']
 
