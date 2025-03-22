@@ -7,7 +7,7 @@ from .trips import (
     TransportSerializer,
     TripTravelerSerializer
 )
-
+from .countries import CountrySerializer
 __all__ = [
     'TripSerializer',
     'TripCreateUpdateSerializer',
@@ -15,5 +15,6 @@ __all__ = [
     'ActivitySerializer',
     'AccommodationSerializer',
     'TransportSerializer',
-    'TripTravelerSerializer'
+    'TripTravelerSerializer',
+    'CountrySerializer'
 ] 

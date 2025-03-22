@@ -19,6 +19,11 @@ class UserViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         data = request.data.copy()
+        
+        for field, value in data.items():
+            if isinstance(value, dict) and 'id' in value:
+                data[field] = value['id']
+            
         serializer = self.get_serializer(instance, data=data, partial=True)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)

@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 import uuid
 from trips.utils.enums import UserRole
+from trips.models.countries import Country
 
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -16,7 +17,7 @@ class Profile(models.Model):
 	
 	# Travel Documents
 	passport_expiry = models.DateField(null=True, blank=True)
-	nationality = models.CharField(max_length=100, blank=True)
+	nationality = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True)
 	
 
 	class Meta:
